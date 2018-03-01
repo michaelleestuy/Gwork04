@@ -1,16 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <string.h>
-#include <errno.h>
+#include <math.h>
 
+#define PI 3.141592654
 
 struct matrix {
   int entries;
-  int array[4][40];
+  float array[4][40];
 };
 
 struct matrix* make_new(){
@@ -21,7 +18,7 @@ struct matrix* make_new(){
 
 
 
-void add_entry(struct matrix * b, int x0, int y0, int z0, int b0, int x1, int y1, int z1, int b1){
+void add_entry(struct matrix * b, float x0, float y0, float z0, float b0, float x1, float y1, float z1, float b1){
   b->array[0][b->entries] = x0;
   b->array[1][b->entries] = y0;
   b->array[2][b->entries] = z0;
@@ -43,7 +40,7 @@ void print_matrix(struct matrix * b){
   int i, j;
   for(i = 0; i < 4; i++){
     for(j = 0; j < b->entries; j++){
-      printf("%d ", b->array[i][j]);      
+      printf("%f ", b->array[i][j]);      
     }
     printf("\n");
   }
@@ -51,10 +48,10 @@ void print_matrix(struct matrix * b){
 
 void multiply(struct matrix * a, struct matrix * b){
   int counter = b->entries;
-  int w = 0;
-  int x = 0;
-  int y = 0;
-  int z = 0;
+  float w = 0;
+  float x = 0;
+  float y = 0;
+  float z = 0;
 
   int i;
   for(i = 0; i < counter; i++){
@@ -70,11 +67,11 @@ void multiply(struct matrix * a, struct matrix * b){
 }
 
 void linemaker(char image[500][500], int x, int y, int ex, int ey){
-  int dx = ex - x;
-  int dy = ey - y;
+  float dx = ex - x;
+  float dy = ey - y;
   if( (dx < 0 && dy < 0) || (dx > 0 && dy < 0) || (dx == 0 && dy < 0) || (dy == 0 && dx < 0)){
-    int tx = x;
-    int ty = y;
+    float tx = x;
+    float ty = y;
     x = ex;
     y = ey;
     ex = tx;
@@ -82,9 +79,9 @@ void linemaker(char image[500][500], int x, int y, int ex, int ey){
     dx = ex - x;
     dy = ey - y;
   }
-  int c = dx * y - dy * x;
+  float c = dx * y - dy * x;
   if(dy > 0 && dx < 0){
-    int d =  2 * dy * (x + 1) - dx * (2 * y + 1) + 2 * c;
+    float d =  2 * dy * (x + 1) - dx * (2 * y + 1) + 2 * c;
     if(dx + dy <= 0){
        while(x >= ex){
 	 image[x][y] = 'r';
@@ -109,7 +106,7 @@ void linemaker(char image[500][500], int x, int y, int ex, int ey){
     }
   } 
   else if(dx >= dy){
-    int d =  2 * dy * (x + 1) - dx * (2 * y + 1) + 2 * c;   
+    float d =  2 * dy * (x + 1) - dx * (2 * y + 1) + 2 * c;   
     while(x <= ex){
       image[x][y] = 'r';
       if(d > 0){
@@ -121,7 +118,7 @@ void linemaker(char image[500][500], int x, int y, int ex, int ey){
     }
   }  
   else if(dy > dx){
-    int d =  dy * (2 * x + 1) - dx * (2 * y) + 2 * c;   
+    float d =  dy * (2 * x + 1) - dx * (2 * y) + 2 * c;   
     while(y <= ey){
       image[x][y] = 'r';
       if(d < 0){
@@ -143,7 +140,7 @@ void edgemaker(struct matrix * a, char image[500][500]){
 }
 
 
-struct matrix * translation(int x, int y, int z){
+struct matrix * translation(float x, float y, float z){
   struct matrix * b = make_identity();
   b->array[0][3] = x;
   b->array[1][3] = y;
@@ -151,7 +148,7 @@ struct matrix * translation(int x, int y, int z){
   return b;
 }
 
-struct matrix * scale(int x){
+struct matrix * scale(float x){
   struct matrix * b = make_identity();
   b->array[0][0] = x;
   b->array[1][1] = x;
@@ -159,7 +156,22 @@ struct matrix * scale(int x){
   return b;
 }
 
+struct matrix * z_rotation(float x){
+  struct matrix * b = make_identity();
+  
+  b->array[0][0] = cosf(x * PI / 180);
+  b->array[0][1] = -1 * sinf(x * PI / 180);
+  b->array[1][0] = sinf(x * PI / 180);
+  b->array[1][1] = cosf(x * PI / 180);
+  
+  return b;
+
+}
+
 void main(){
-  struct matrix * b = scale(57);
+  /*
+  struct matrix * b = z_rotation(90);
   print_matrix(b);
+  */
+  printf("%lf\n", cos(10));
 }
