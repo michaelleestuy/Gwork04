@@ -288,9 +288,16 @@ void main(){
 	multiply(asd, transformations);
       }
     }
-
-
-    
+    else if(strcmp(token, "apply") == 0){
+      multiply(transformations, edges);
+    }
+    else if(strcmp(token, "display") == 0){
+      
+    }
+    else if(strcmp(token, "save") == 0){
+      token = strtok(NULL, " \n");
+      save(image, token);      
+    }    
     token = strtok(NULL, " \n");
   }
 
