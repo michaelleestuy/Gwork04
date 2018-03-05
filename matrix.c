@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #define PI 3.141592654
 
@@ -189,6 +191,68 @@ struct matrix * x_rotation(float x){ //y-z
   return b;
 }
 
+void save(char image[500][500], char* file){
+  int b = open(file, O_CREAT | O_WRONLY | O_APPEND, 888);
+  int i, j;
+  write(b, "P3 500 500 255", sizeof("P3 500 500 255"));
+  for(i = 0; i < 500; i++){
+    for(j = 0; j < 500; j++){
+      if(image[i][j] == 'g')
+	write(b, "0 255 0", sizeof("0 255 0"));
+      if(image[i][j] == 'r')
+	write(b, "255 0 0", sizeof("255 0 0"));
+    }
+  }
+}
+
 void main(){
+  char image[500][500];
+  int i;
+  int j;
+  for(i = 0; i < 500; i++){
+    for(j = 0; j < 500; j++){
+      image[i][j] = 'g';
+    }
+  }
+
+  struct matrix * transformations = make_identity();
+  struct matrix * edges = make_new();
+
+  char input[100];
+  int red = open("input.s", O_RDONLY, 0);
+  read(red, input, sizeof(input));
+
+  char* token;
+
+  token = strtok(input, " \n");
+  while(token != NULL){
+    printf("token: %s\n%d\n",token, strcmp(token, "line"));
+    if(strcmp(token, "line") == 0){
+      printf("entered\n");
+      token = strtok(NULL, " \n");
+      int a = atoi(token);
+      token = strtok(NULL, " \n");
+      int b = atoi(token);
+      token = strtok(NULL, " \n");
+      int c = atoi(token);
+
+      token = strtok(NULL, " \n");
+      int d = atoi(token);
+      token = strtok(NULL, " \n");
+      int e = atoi(token);
+      token = strtok(NULL, " \n");
+      int f = atoi(token);
+
+      printf("%d %d %d %d %d %d\n", a, b, c, d, e, f);
+      add_entry(edges, a, b, c, 1, d, e, f, 1);
+    }
+
+
+    
+    token = strtok(NULL, " \n");
+  }
+
+  //print_matrix(edges);
+  
   
 }
