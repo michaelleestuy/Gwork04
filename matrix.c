@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <math.h>
 
-#define PI 3.141592654
+#define PI 3.1415
 
 struct matrix {
   int entries;
@@ -158,35 +158,35 @@ struct matrix * scale(float x){
   return b;
 }
 
-struct matrix * z_rotation(float x){ //x-y
+struct matrix * z_rotation(double x){ //x-y
   struct matrix * b = make_identity();
   
-  b->array[0][0] = cosf(x * PI / 180);
-  b->array[0][1] = -1 * sinf(x * PI / 180);
-  b->array[1][0] = sinf(x * PI / 180);
-  b->array[1][1] = cosf(x * PI / 180);
+  b->array[0][0] = cos(x * PI / 180);
+  b->array[0][1] = -1 * sin(x * PI / 180);
+  b->array[1][0] = sin(x * PI / 180);
+  b->array[1][1] = cos(x * PI / 180);
   
   return b;
 }
 
-struct matrix * y_rotation(float x){ //z-x
+struct matrix * y_rotation(double x){ //z-x
   struct matrix * b = make_identity();
   
-  b->array[2][2] = cosf(x * PI / 180);
-  b->array[2][0] = -1 * sinf(x * PI / 180);
-  b->array[0][2] = sinf(x * PI / 180);
-  b->array[0][0] = cosf(x * PI / 180);
+  b->array[2][2] = cos(x * PI / 180);
+  b->array[2][0] = -1 * sin(x * PI / 180);
+  b->array[0][2] = sin(x * PI / 180);
+  b->array[0][0] = cos(x * PI / 180);
   
   return b;
 }
 
-struct matrix * x_rotation(float x){ //y-z
+struct matrix * x_rotation(double x){ //y-z
   struct matrix * b = make_identity();
   
-  b->array[1][1] = cosf(x * PI / 180);
-  b->array[1][2] = -1 * sinf(x * PI / 180);
-  b->array[2][1] = sinf(x * PI / 180);
-  b->array[2][2] = cosf(x * PI / 180);
+  b->array[1][1] = cos(x * PI / 180);
+  b->array[1][2] = -1 * sin(x * PI / 180);
+  b->array[2][1] = sin(x * PI / 180);
+  b->array[2][2] = cos(x * PI / 180);
   
   return b;
 }
@@ -226,7 +226,6 @@ void main(){
 
   token = strtok(input, " \n");
   while(token != NULL){
-    printf("token: %s\n%d\n",token, strcmp(token, "line"));
     if(strcmp(token, "line") == 0){
       printf("entered\n");
       token = strtok(NULL, " \n");
@@ -243,7 +242,6 @@ void main(){
       token = strtok(NULL, " \n");
       int f = atoi(token);
 
-      printf("%d %d %d %d %d %d\n", a, b, c, d, e, f);
       add_entry(edges, a, b, c, 1, d, e, f, 1);
     }
 
@@ -252,7 +250,7 @@ void main(){
     token = strtok(NULL, " \n");
   }
 
-  //print_matrix(edges);
+  print_matrix(edges);
   
   
 }
