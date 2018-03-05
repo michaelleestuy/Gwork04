@@ -135,7 +135,7 @@ void edgemaker(struct matrix * a, char image[500][500]){
   int counter = a->entries;
   int i;
   for(i = 0; i < counter; i+=2){
-    linemaker(image, a->array[0][i], a->array[1][i], a->array[0][i+1], a->array[1][i+1]);
+    linemaker(image, (int)round(a->array[0][i]), (int)round(a->array[1][i]), (int)round(a->array[0][i+1]), (int)round(a->array[1][i+1]));
   }
 }
 
@@ -156,7 +156,7 @@ struct matrix * scale(float x){
   return b;
 }
 
-struct matrix * z_rotation(float x){
+struct matrix * z_rotation(float x){ //x-y
   struct matrix * b = make_identity();
   
   b->array[0][0] = cosf(x * PI / 180);
@@ -165,13 +165,30 @@ struct matrix * z_rotation(float x){
   b->array[1][1] = cosf(x * PI / 180);
   
   return b;
+}
 
+struct matrix * y_rotation(float x){ //z-x
+  struct matrix * b = make_identity();
+  
+  b->array[2][2] = cosf(x * PI / 180);
+  b->array[2][0] = -1 * sinf(x * PI / 180);
+  b->array[0][2] = sinf(x * PI / 180);
+  b->array[0][0] = cosf(x * PI / 180);
+  
+  return b;
+}
+
+struct matrix * x_rotation(float x){ //y-z
+  struct matrix * b = make_identity();
+  
+  b->array[1][1] = cosf(x * PI / 180);
+  b->array[1][2] = -1 * sinf(x * PI / 180);
+  b->array[2][1] = sinf(x * PI / 180);
+  b->array[2][2] = cosf(x * PI / 180);
+  
+  return b;
 }
 
 void main(){
-  /*
-  struct matrix * b = z_rotation(90);
-  print_matrix(b);
-  */
-  printf("%lf\n", cos(10));
+  
 }
