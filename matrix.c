@@ -150,11 +150,11 @@ struct matrix * translation(float x, float y, float z){
   return b;
 }
 
-struct matrix * scale(float x){
+struct matrix * scale(float x, float y, float z){
   struct matrix * b = make_identity();
   b->array[0][0] = x;
-  b->array[1][1] = x;
-  b->array[2][2] = x;
+  b->array[1][1] = y;
+  b->array[2][2] = z;
   return b;
 }
 
@@ -243,6 +243,50 @@ void main(){
       int f = atoi(token);
 
       add_entry(edges, a, b, c, 1, d, e, f, 1);
+    }
+    else if(strcmp(token, "ident") == 0){
+      transformations = make_identity();
+    }
+    else if(strcmp(token, "scale") == 0){
+      token = strtok(NULL, " \n");
+      int m = atoi(token);
+      token = strtok(NULL, " \n");
+      int n = atoi(token);
+      token = strtok(NULL, " \n");
+      int o = atoi(token);
+      struct matrix * asd = scale(m, n, o);
+      multiply(asd, transformations);
+    }
+    else if(strcmp(token, "move") == 0){
+      token = strtok(NULL, " \n");
+      int m = atoi(token);
+      token = strtok(NULL, " \n");
+      int n = atoi(token);
+      token = strtok(NULL, " \n");
+      int o = atoi(token);
+      struct matrix * asd = translation(m, n, o);
+      multiply(asd, transformations);      
+    }
+    else if(strcmp(token, "rotate") == 0){
+      token = strtok(NULL, " \n");
+      if(strcmp(token, "z") == 0){
+	token = strtok(NULL, " \n");
+	int m = atoi(token);
+	struct matrix * asd = z_rotation(m);
+	multiply(asd, transformations);
+      }
+      else if(strcmp(token, "y") == 0){
+	token = strtok(NULL, " \n");
+	int m = atoi(token);
+	struct matrix * asd = y_rotation(m);
+	multiply(asd, transformations);
+      }
+      else if(strcmp(token, "x") == 0){
+	token = strtok(NULL, " \n");
+	int m = atoi(token);
+	struct matrix * asd = x_rotation(m);
+	multiply(asd, transformations);
+      }
     }
 
 
