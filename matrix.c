@@ -227,7 +227,6 @@ void main(){
   token = strtok(input, " \n");
   while(token != NULL){
     if(strcmp(token, "line") == 0){
-      printf("entered\n");
       token = strtok(NULL, " \n");
       int a = atoi(token);
       token = strtok(NULL, " \n");
@@ -302,7 +301,6 @@ void main(){
     token = strtok(NULL, " \n");
   }
 
-  print_matrix(edges);
   
   
 }
