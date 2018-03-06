@@ -291,7 +291,9 @@ void main(){
       multiply(transformations, edges);
     }
     else if(strcmp(token, "display") == 0){
-    
+      token = strtok(NULL, " \n");
+      edgemaker(edges, image);
+      save(image, token); 
     }
     else if(strcmp(token, "save") == 0){
       token = strtok(NULL, " \n");
